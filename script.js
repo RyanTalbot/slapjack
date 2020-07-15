@@ -1,6 +1,12 @@
+// javascript
 let opponentCards = [];
 let discardCards = [];
 let playerCards = [];
+
+const opponentDeck = document.getElementById(`opponent-deck`);
+const discardPile = document.getElementById(`discard-pile`);
+const playerDeck = document.getElementById(`player-deck`);
+const opponentFace = document.getElementById(`opponent-face`);
 
 for (let i = 0; i < 4; i++) {
   let suit;
@@ -40,6 +46,9 @@ for (let i = 0; i < 4; i++) {
   }
 }
 
+console.log(discardCards);
+
+// Shuffle array
 function shuffle(deck) {
   let currentCard = deck.length;
   let temporaryCard;
@@ -60,6 +69,8 @@ function shuffle(deck) {
 
 discardCards = shuffle(discardCards);
 
+console.log(discardCards);
+
 for (let i = 0, c = discardCards.length; i < c; i++) {
   if (i % 2 === 0) {
     playerCards.push(discardCards[i]);
@@ -75,6 +86,90 @@ function playCard() {
   playerCards.splice(0, 1);
 
   const currentCard = discardCards[discardCards.length - 1];
-  const currentValue = currentCard.substring(0, 1);
+  let currentValue = currentCard.substring(0, 1);
+  if (Number(currentValue)) {
+    currentValue = Number(currentValue) + 1;
+  }
   const suit = currentCard.substring(1, 2);
+  const cardNumbers = document.getElementsByClassName(`card-number`);
+  let suitSymbol;
+  discardPile.classList.remove(`red`);
+  for (let i = 0; i < 2; i++) {
+    switch (suit) {
+      case `H`:
+        {
+          discardPile.classList.add(`red`);
+          cardNumbers[i].innerText = currentValue + "\n♥";
+          suitSymbol = "♥";
+        }
+        break;
+      case `D`:
+        {
+          discardPile.classList.add(`red`);
+          cardNumbers[i].innerText = currentValue + "\n♦";
+          suitSymbol = "♦";
+        }
+        break;
+      case `S`:
+        {
+          cardNumbers[i].innerText = currentValue + "\n♠";
+          suitSymbol = "♠";
+        }
+        break;
+      case `C`:
+        {
+          cardNumbers[i].innerText = currentValue + "\n♣";
+          suitSymbol = "♣";
+        }
+        break;
+      default:
+        console.error(`No recognizable suit found`);
+    }
+  }
+
+  const cardArt = document.getElementsByClassName(`card-art`)[0];
+  while (cardArt.children[0]) {
+    cardArt.children[0].remove();
+  }
+
+  cardArt.style.flexFlow = null;
+
+  if (Number(currentValue)) {
+    for (let i = 0; i < currentValue; i++) {
+      let suitSymbolContainer = document.createElement(`div`);
+      suitSymbolContainer.textContent = suitSymbol;
+      cardArt.append(suitSymbolContainer);
+    }
+
+    if (currentValue < 4) {
+      cardArt.style.flexFlow = `column wrap`;
+    }
+  } else if (!Number(currentValue)) {
+    switch (currentValue) {
+      case `J`:
+        suitSymbol = `🤵`;
+        break;
+      case `Q`:
+        suitSymbol = `👸`;
+        break;
+      case `K`:
+        suitSymbol = `🤴`;
+        break;
+      default:
+    }
+
+    let suitSymbolContainer = document.createElement(`div`);
+    suitSymbolContainer.textContent = suitSymbol;
+    suitSymbolContainer.style.fontSize = `6vh`;
+    cardArt.append(suitSymbolContainer);
+
+    if (currentValue !== `A`) {
+      cardArt.style.flexFlow = `column wrap`;
+      let flippedSuitSymbolContainer = document.createElement(`div`);
+      flippedSuitSymbolContainer.textContent = suitSymbol;
+      flippedSuitSymbolContainer.style.fontSize = `6vh`;
+      flippedSuitSymbolContainer.style.transform = `rotate(180deg)`;
+      cardArt.append(flippedSuitSymbolContainer);
+    }
+  }
 }

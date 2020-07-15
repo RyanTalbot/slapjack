@@ -72,4 +72,14 @@ body {
 .card-art {
   display: flex;
   flex-flow: row wrap;
+  width: 60%;
+}
+
+.card-art > * {
+  flex: 50%;
+  text-align: center;
+}
+
+.red {
+  color: #ff0000;
 }
