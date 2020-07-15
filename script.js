@@ -83,7 +83,7 @@ discardCards = [];
 
 function playCard(event) {
   const target = event.target.id;
-
+  discardPile.style.visibility = `visible`;
   if (target === `player-deck`) {
     discardCards.push(playerCards[0]);
     playerCards.splice(0, 1);
@@ -179,6 +179,7 @@ function playCard(event) {
       cardArt.append(flippedSuitSymbolContainer);
     }
   }
+  getCurrentCards();
   opponentAI(target);
 }
 
@@ -194,6 +195,7 @@ function opponentAI(lastPlayer) {
       discardCards[discardCardsLength - 1].includes(`J`)
     ) {
       console.log(`Slap!`);
+      slap();
     } else if (lastPlayer === `player-deck`) {
       let event = new Object();
       event.target = new Object();
@@ -210,19 +212,57 @@ function slap(event) {
     currentPlayer = `player`;
   } else {
     currentPlayer = `opponent`;
+    if (discardCardsLength === 0) {
+      changeOpponentFace(`disappointed`);
+      return;
+    }
   }
   if (
     discardCardsLength > 0 &&
     discardCards[discardCardsLength - 1].includes(`J`)
   ) {
+    discardPile.style.visibility = `hidden`;
     if (currentPlayer === `player`) {
       playerCards = playerCards.concat(shuffle(discardCards));
+      changeOpponentFace(`disappointed`);
       window.clearTimeout(reaction);
     } else if (currentPlayer === `opponent`) {
       opponentCards = opponentCards.concat(shuffle(discardCards));
+      changeOpponentFace(`happy`);
       opponentAI(`player-deck`);
     }
     discardCards = [];
+    getCurrentCards();
+  }
+}
+
+let expression;
+function changeOpponentFace(mood) {
+  if (mood === `happy`) {
+    opponentFace.textContent = `😁`;
+  } else if (mood === `disappointed`) {
+    opponentFace.textContent = `😣`;
+  }
+  const expressionTime = Math.floor(Math.random() * (1000 - 500)) + 500;
+  window.clearTimeout(expression);
+  expression = window.setTimeout(function () {
+    opponentFace.textContent = `🙂`;
+  }, expressionTime);
+}
+
+function getCurrentCards() {
+  if (playerCards.length === 0) {
+    playerDeck.removeEventListener(`click`, playCard, false);
+    playerDeck.style.visibility = `hidden`;
+    window.clearTimeout(reaction);
+    document.getElementById(`win-lose-status`).textContent = `YOU LOSE!`;
+    document.getElementById(`play-again-wrapper`).style.display = `flex`;
+  } else if (opponentCards.length === 0) {
+    opponentFace.textContent = `😣`;
+    opponentDeck.style.visibility = `hidden`;
+    window.clearTimeout(reaction);
+    document.getElementById(`win-lose-status`).textContent = `YOU WIN!`;
+    document.getElementById(`play-again-wrapper`).style.display = `flex`;
   }
 }
 
