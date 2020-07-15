@@ -25,10 +25,12 @@ body {
 
 #opponent-deck > * {
   margin-right: 35vw;
+  pointer-events: none;
 }
 
 #player-deck > * {
   margin-left: 35vw;
+  pointer-events: none;
 }
 
 #discard-pile {

@@ -81,9 +81,16 @@ for (let i = 0, c = discardCards.length; i < c; i++) {
 
 discardCards = [];
 
-function playCard() {
-  discardCards.push(playerCards[0]);
-  playerCards.splice(0, 1);
+function playCard(event) {
+  const target = event.target.id;
+
+  if (target === `player-deck`) {
+    discardCards.push(playerCards[0]);
+    playerCards.splice(0, 1);
+  } else if (target === `opponent-deck`) {
+    discardCards.push(opponentCards[0]);
+    opponentCards.splice(0, 1);
+  }
 
   const currentCard = discardCards[discardCards.length - 1];
   let currentValue = currentCard.substring(0, 1);
@@ -172,4 +179,28 @@ function playCard() {
       cardArt.append(flippedSuitSymbolContainer);
     }
   }
+  opponentAI(target);
 }
+
+let reaction;
+
+function opponentAI(lastPlayer) {
+  const reactionTime = Math.floor(Math.random() * (1400 - 900)) + 900;
+  window.clearTimeout(reaction);
+  reaction = window.setTimeout(function () {
+    const discardCardsLength = discardCards.length;
+    if (
+      discardCardsLength > 0 &&
+      discardCards[discardCardsLength - 1].includes(`J`)
+    ) {
+      console.log(`Slap!`);
+    } else if (lastPlayer === `player-deck`) {
+      let event = new Object();
+      event.target = new Object();
+      event.target.id = `opponent-deck`;
+      playCard(event);
+    }
+  }, reactionTime);
+}
+
+playerDeck.addEventListener(`click`, playCard, false);
