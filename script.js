@@ -69,3 +69,12 @@ for (let i = 0, c = discardCards.length; i < c; i++) {
 }
 
 discardCards = [];
+
+function playCard() {
+  discardCards.push(playerCards[0]);
+  playerCards.splice(0, 1);
+
+  const currentCard = discardCards[discardCards.length - 1];
+  const currentValue = currentCard.substring(0, 1);
+  const suit = currentCard.substring(1, 2);
+}
