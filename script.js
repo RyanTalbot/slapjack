@@ -203,4 +203,28 @@ function opponentAI(lastPlayer) {
   }, reactionTime);
 }
 
+function slap(event) {
+  const discardCardsLength = discardCards.length;
+  let currentPlayer;
+  if (event !== undefined) {
+    currentPlayer = `player`;
+  } else {
+    currentPlayer = `opponent`;
+  }
+  if (
+    discardCardsLength > 0 &&
+    discardCards[discardCardsLength - 1].includes(`J`)
+  ) {
+    if (currentPlayer === `player`) {
+      playerCards = playerCards.concat(shuffle(discardCards));
+      window.clearTimeout(reaction);
+    } else if (currentPlayer === `opponent`) {
+      opponentCards = opponentCards.concat(shuffle(discardCards));
+      opponentAI(`player-deck`);
+    }
+    discardCards = [];
+  }
+}
+
 playerDeck.addEventListener(`click`, playCard, false);
+discardPile.addEventListener(`click`, slap, false);
