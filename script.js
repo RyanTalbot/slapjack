@@ -59,3 +59,13 @@ function shuffle(deck) {
 }
 
 discardCards = shuffle(discardCards);
+
+for (let i = 0, c = discardCards.length; i < c; i++) {
+  if (i % 2 === 0) {
+    playerCards.push(discardCards[i]);
+  } else if (i % 2 !== 0) {
+    opponentCards.push(discardCards[i]);
+  }
+}
+
+discardCards = [];
