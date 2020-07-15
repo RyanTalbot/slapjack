@@ -39,3 +39,23 @@ for (let i = 0; i < 4; i++) {
     }
   }
 }
+
+function shuffle(deck) {
+  let currentCard = deck.length;
+  let temporaryCard;
+  let randomCard;
+
+  while (0 !== currentCard) {
+    // Pick a card
+    randomCard = Math.floor(Math.random() * currentCard);
+    currentCard -= 1;
+
+    // Shuffle
+    temporaryCard = deck[currentCard];
+    deck[currentCard] = deck[randomCard];
+    deck[randomCard] = temporaryCard;
+  }
+  return deck;
+}
+
+discardCards = shuffle(discardCards);
