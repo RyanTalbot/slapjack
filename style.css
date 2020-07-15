@@ -3,3 +3,37 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  background-color: darkgreen;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#opponent-face {
+  font-size: 15vh;
+}
+
+#opponent-deck,
+#player-deck {
+  height: 21vh;
+}
+
+#discard-pile {
+  margin: 4vh 0px;
+}
+
+.card {
+  border-radius: 5px;
+  background-color: #ffffff;
+  width: 15vh;
+  height: 21vh;
+}
+
+.card-back {
+  background: radial-gradient(#1e2e5f, #9198e5);
+}
